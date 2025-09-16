@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Thank You</title>
+</head>
+<body>
+    <h2>Thank you! Your essay order has been submitted.</h2>
+    <p>We’ll contact you shortly.</p>
+    {% if order %}
+        <p><strong>Order Summary:</strong></p>
+        <ul>
+            <li>Topic: {{ order.topic }}</li>
+            <li>Pages: {{ order.pages }}</li>
+            <li>Price: ${{ order.price }}</li>
+        </ul>
+    {% endif %}
+</body>
+</html>
