@@ -1,6 +1,7 @@
-<!DOCTYPE html>
-<html>
-<head>
+{% extends 'main.html' %}
+{% block content %}
+
+
     <title>Order an Essay</title>
     <style>
         body { font-family: Arial, sans-serif; margin: 40px; }
@@ -11,14 +12,49 @@
         }
         button { background: #4CAF50; color: white; border: none; cursor: pointer; }
         button:hover { background: #45a049; }
+        h2 { text-align: center; }
+        .total { font-weight: bold; margin-top: 15px; text-align: center; }
     </style>
 </head>
 <body>
     <h2>Essay Ordering Form</h2>
     <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
+        {{ form.name.label_tag }} {{ form.name }}
+        {{ form.email.label_tag }} {{ form.email }}
+        {{ form.topic.label_tag }} {{ form.topic }}
+
+        {{ form.pages.label_tag }} {{ form.pages }}
+
+        <!-- Price field (read-only) -->
+        <label for="id_price">Price ($ per page)</label>
+        <input type="text" id="id_price" value="10" readonly>
+
+        {{ form.deadline.label_tag }} {{ form.deadline }}
+        {{ form.academic_level.label_tag }} {{ form.academic_level }}
+        {{ form.formatting_style.label_tag }} {{ form.formatting_style }}
+        {{ form.instructions.label_tag }} {{ form.instructions }}
+
+        <!-- Total cost before submit -->
+        <p class="total">Total Cost: $<span id="total_cost">0</span></p>
+
         <button type="submit">Submit Order</button>
     </form>
-</body>
-</html>
+
+    <script>
+        // Auto-update total cost based on pages × $10
+        const pagesInput = document.getElementById("id_pages");
+        const totalCostSpan = document.getElementById("total_cost");
+
+        function updateTotal() {
+            let pages = parseInt(pagesInput.value) || 0;
+            let total = pages * 10;
+            totalCostSpan.textContent = total.toFixed(2);
+        }
+
+        pagesInput.addEventListener("input", updateTotal);
+        window.onload = updateTotal;
+    </script>
+
+{% endblock content %}
+

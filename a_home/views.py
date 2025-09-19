@@ -19,10 +19,38 @@ def order_essay(request):
     if request.method == 'POST':
         form = EssayOrderForm(request.POST)
         if form.is_valid():
-            form.save()
-            return render(request, 'a_home/thank_you.html')
+            order = form.save()
+            #send email to client
+            subject= "Your Essay Order confirmation"
+            message= (
+                f"Hello {order.name}, \n\n"
+                f"Thank you for your order! Here are your details:\n\n"
+                f"Topic: {order.topic}\n"
+                f"pages: {order.pages}\n"
+                f"Deadline: {order.deadline}\n"
+                f"Academic Level: {order.academic_level}\n"
+                f"Formatting Style: {order.formatting_style}\n"
+                f"Price: {order.price}\n\n"
+                f"We'll contact you shortly.\n\n"
+                f"Best regards, \nEssay Service Team"
+            )
+            try:
+
+               send_mail(
+                subject,
+                message,
+                "noreply@essayservice.com", #sender email
+                [order.email],  #recepient (client's email)
+                fail_silently=False,
+            )
+            except Exception as e:
+             print("Email failed", e)
+
+
+            return render(request, 'a_home/thank_you.html', {'order': order})
         else:
             return render (request, 'a_home/order_form.html', {'form': form})
     else:
         form = EssayOrderForm()
-    return render(request, 'a_home/order_form.html', {'form': form})
+        return render(request, 'a_home/order_form.html', {'form': form})
+

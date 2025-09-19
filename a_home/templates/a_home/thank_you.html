@@ -1,18 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Thank You</title>
-</head>
-<body>
+{% extends 'main.html' %}
+{% block content %}
     <h2>Thank you! Your essay order has been submitted.</h2>
     <p>We’ll contact you shortly.</p>
     {% if order %}
         <p><strong>Order Summary:</strong></p>
         <ul>
+
             <li>Topic: {{ order.topic }}</li>
             <li>Pages: {{ order.pages }}</li>
+            <li>Deadline: {{ order.deadline }}</li>
             <li>Price: ${{ order.price }}</li>
         </ul>
+
+        <p>Please complete your payment via Sendwave to confirm your order</p>
+        <p><strong>Sendwave Number: </strong>+254123456789</p>
+
     {% endif %}
-</body>
-</html>
+
+
+{% endblock content %}
